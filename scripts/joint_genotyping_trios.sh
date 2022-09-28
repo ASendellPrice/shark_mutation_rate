@@ -18,7 +18,7 @@ else
 fi
 
 #Set offspring ID using slurm_array_task_id
-OFFSPRING_ID=$(head -n $SLURM_ARRAY_TASK_ID offspringIDs.txt | tail -n 1)
+OFFSPRING_ID=$(head -n $SLURM_ARRAY_TASK_ID ../resources/offspringIDs.txt | tail -n 1)
 
 #For each genome block do the following ...
 for BLOCK_NO in $(seq 1 10)
