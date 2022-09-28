@@ -2,6 +2,7 @@
 #SBATCH -A snic2022-5-242
 #SBATCH -p core -N 1
 #SBATCH -t 4-00:00:00
+#SBATCH --array=2-9:1
 #SBATCH -J joint_genotyping
 
 #Load required modules
@@ -17,8 +18,7 @@ else
 fi
 
 #Set offspring ID using slurm_array_task_id
-#OFFSPRING_ID=$(head -n $SLURM_ARRAY_TASK_ID offspringIDs.txt | tail -n 1)
-OFFSPRING_ID=ind2023
+OFFSPRING_ID=$(head -n $SLURM_ARRAY_TASK_ID offspringIDs.txt | tail -n 1)
 
 #For each genome block do the following ...
 for BLOCK_NO in $(seq 1 10)
