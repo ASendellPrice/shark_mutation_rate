@@ -5,7 +5,7 @@
 #SBATCH -J joint_genotyping
 
 #Load required modules
-module load bioinfo-tools GATK/4.2.0.0
+module load bioinfo-tools GATK/4.2.0.0 bcftools
 
 #Create / move into directory "joint_genotyping"
 if [[ ! -d joint_genotyping ]]
