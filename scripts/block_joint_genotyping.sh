@@ -7,11 +7,11 @@
 
 #Submitted like so:
 #mkdir joint_genotyping
-cd joint_genotyping
-for OFFSPRING_ID in $(cat ../resources/offspringIDs.txt)
-do
-    sbatch ../scripts/block_joint_genotyping.sh $OFFSPRING_ID
-done
+#cd joint_genotyping
+#for OFFSPRING_ID in $(cat ../resources/offspringIDs.txt)
+#do
+#    sbatch ../scripts/block_joint_genotyping.sh $OFFSPRING_ID
+#done
 
 #Load required modules
 module load bioinfo-tools GATK/4.2.0.0 bcftools
