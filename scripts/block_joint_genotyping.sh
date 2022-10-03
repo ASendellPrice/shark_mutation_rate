@@ -23,23 +23,20 @@ OFFSPRING_ID=$1
 BLOCK_NO=$SLURM_ARRAY_TASK_ID
 
 #Combine GVCFs
-#gatk --java-options "-Xmx120g" CombineGVCFs \
-#-R /proj/snic2020-2-19/private/shark/reference/satsuma/sHemOce1.mat.decon.20210528.fasta \
-#--variant /proj/snic2020-2-19/private/shark/variants/gvcfs/${OFFSPRING_ID}_block_${BLOCK_NO}.g.vcf.gz \
-#--variant /proj/snic2020-2-19/private/shark/variants/gvcfs/sHemOce2_block_${BLOCK_NO}.g.vcf.gz \
-#--variant /proj/snic2020-2-19/private/shark/variants/gvcfs/sHemOce3_block_${BLOCK_NO}.g.vcf.gz \
-#--convert-to-base-pair-resolution \
-#-O block_${BLOCK_NO}.trio_${OFFSPRING_ID}.g.vcf.gz
+gatk --java-options "-Xmx120g" CombineGVCFs \
+-R /proj/snic2020-2-19/private/shark/reference/satsuma/sHemOce1.mat.decon.20210528.fasta \
+--variant /proj/snic2020-2-19/private/shark/variants/gvcfs/${OFFSPRING_ID}_block_${BLOCK_NO}.g.vcf.gz \
+--variant /proj/snic2020-2-19/private/shark/variants/gvcfs/sHemOce2_block_${BLOCK_NO}.g.vcf.gz \
+--variant /proj/snic2020-2-19/private/shark/variants/gvcfs/sHemOce3_block_${BLOCK_NO}.g.vcf.gz \
+--convert-to-base-pair-resolution \
+-O block_${BLOCK_NO}.trio_${OFFSPRING_ID}.g.vcf.gz
 
-if [[ block_${BLOCK_NO}.trio_${OFFSPRING_ID}.g.vcf.gz ]]
-then
-    #Conduct joint genotyping using gVCFs
-    gatk --java-options "-Xmx120g" GenotypeGVCFs \
-    --include-non-variant-sites \
-    -R /proj/snic2020-2-19/private/shark/reference/satsuma/sHemOce1.mat.decon.20210528.fasta \
-    -V block_${BLOCK_NO}.trio_${OFFSPRING_ID}.g.vcf.gz \
-    -O block_${BLOCK_NO}.trio_${OFFSPRING_ID}.vcf.gz
-fi
+#Conduct joint genotyping using gVCFs
+gatk --java-options "-Xmx120g" GenotypeGVCFs \
+--include-non-variant-sites \
+-R /proj/snic2020-2-19/private/shark/reference/satsuma/sHemOce1.mat.decon.20210528.fasta \
+-V block_${BLOCK_NO}.trio_${OFFSPRING_ID}.g.vcf.gz \
+-O block_${BLOCK_NO}.trio_${OFFSPRING_ID}.vcf.gz
 
 #Remove gVCF and its index
 rm block_${BLOCK_NO}.trio_${OFFSPRING_ID}.g.vcf.gz*
