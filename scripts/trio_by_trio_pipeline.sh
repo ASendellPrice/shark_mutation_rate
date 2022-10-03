@@ -33,8 +33,7 @@ fi
 #Called by GATK:
 # - monomorphic / biallelic sites only
 # - genotyped in offspring and both parents
-#RAW_VCF=trio_${OFFSPRING_ID}.vcf.gz
-RAW_VCF=../../joint_genotyping/block_1.trio_${OFFSPRING_ID}.vcf.gz
+RAW_VCF=../../trio_${OFFSPRING_ID}.vcf.gz
 gatk SelectVariants \
      -R /proj/snic2020-2-19/private/shark/reference/satsuma/sHemOce1.mat.decon.20210528.fasta \
      -V $RAW_VCF \
