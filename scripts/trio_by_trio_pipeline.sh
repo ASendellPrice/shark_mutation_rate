@@ -16,7 +16,8 @@ OFFSPRING_ID=ind2024
 cd joint_genotyping
 #ls block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz > ${OFFSPRING_ID}.vcf.list
 #bcftools concat -f ${OFFSPRING_ID}.vcf.list -o trio_${OFFSPRING_ID}.vcf.gz -O z
-rm block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz
+gatk IndexFeatureFile -I trio_${OFFSPRING_ID}.vcf.gz
+#rm block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz
 
 #Create / move into directory "genotype_filtering"
 if [[ ! -d ../genotype_filtering ]]
@@ -25,7 +26,7 @@ then
     mkdir ../genotype_filtering/${OFFSPRING_ID}
     cd ../genotype_filtering/${OFFSPRING_ID}
 else
-    #mkdir ../genotype_filtering/${OFFSPRING_ID}
+    mkdir ../genotype_filtering/${OFFSPRING_ID}
     cd ../genotype_filtering/${OFFSPRING_ID}
 fi
 
@@ -141,3 +142,6 @@ echo "Candidate DNMs: " $COUNT >> trio_${OFFSPRING_ID}.site.counts.txt
 #Convert putative mutations to "geno" format
 python /proj/snic2020-2-19/private/shark/users/ash/BIN/genomics_general/VCF_processing/parseVCF.py \
 -i trio_${OFFSPRING_ID}.putative_mutations.vcf.gz > trio_${OFFSPRING_ID}.putative_mutations.genotypes.txt
+
+
+###END
