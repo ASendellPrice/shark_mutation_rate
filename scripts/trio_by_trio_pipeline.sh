@@ -5,7 +5,7 @@
 #SBATCH -J genotype_filtering
 
 #Activate conda environment and load required modules
-conda activate GenomicsGeneral
+conda activate genomics_general 
 module load bioinfo-tools GATK/4.2.0.0 bcftools BEDTools/2.29.2 samtools/1.5 vcftools/0.1.16
 
 #Set offspring ID using slurm_array_task_id
@@ -14,9 +14,9 @@ OFFSPRING_ID=ind2024
 
 #Merge multiple block VCFs into a single VCF file
 cd joint_genotyping
-ls block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz > ${OFFSPRING_ID}.vcf.list
-bcftools concat -f ${OFFSPRING_ID}.vcf.list -o trio_${OFFSPRING_ID}.vcf.gz -O z
-#rm block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz
+#ls block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz > ${OFFSPRING_ID}.vcf.list
+#bcftools concat -f ${OFFSPRING_ID}.vcf.list -o trio_${OFFSPRING_ID}.vcf.gz -O z
+rm block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz
 
 #Create / move into directory "genotype_filtering"
 if [[ ! -d ../genotype_filtering ]]
@@ -25,14 +25,14 @@ then
     mkdir ../genotype_filtering/${OFFSPRING_ID}
     cd ../genotype_filtering/${OFFSPRING_ID}
 else
-    mkdir ../genotype_filtering/${OFFSPRING_ID}
+    #mkdir ../genotype_filtering/${OFFSPRING_ID}
     cd ../genotype_filtering/${OFFSPRING_ID}
 fi
 
 #Called by GATK:
 # - monomorphic / biallelic sites only
 # - genotyped in offspring and both parents
-RAW_VCF=../../trio_${OFFSPRING_ID}.vcf.gz
+RAW_VCF=../../joint_genotyping/trio_ind2024.vcf.gz
 gatk SelectVariants \
      -R /proj/snic2020-2-19/private/shark/reference/satsuma/sHemOce1.mat.decon.20210528.fasta \
      -V $RAW_VCF \
@@ -137,3 +137,7 @@ rm temp1.vcf.gz
 rm temp2.vcf.gz
 COUNT=$(zcat trio_${OFFSPRING_ID}.putative_mutations.vcf.gz | grep -v "#" | wc -l)
 echo "Candidate DNMs: " $COUNT >> trio_${OFFSPRING_ID}.site.counts.txt
+
+#Convert putative mutations to "geno" format
+python /proj/snic2020-2-19/private/shark/users/ash/BIN/genomics_general/VCF_processing/parseVCF.py \
+-i trio_${OFFSPRING_ID}.putative_mutations.vcf.gz > trio_${OFFSPRING_ID}.putative_mutations.genotypes.txt
