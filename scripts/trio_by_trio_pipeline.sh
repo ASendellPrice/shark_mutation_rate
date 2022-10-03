@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -A snic2022-5-242
 #SBATCH -p core -N 1
-#SBATCH -t 2-00:00:00
+#SBATCH -t 1-00:00:00
 #SBATCH -J genotype_filtering
 
 #Activate conda environment and load required modules
