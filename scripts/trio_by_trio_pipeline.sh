@@ -14,8 +14,8 @@ OFFSPRING_ID=$(head -n $SLURM_ARRAY_TASK_ID resources/offspringIDs.txt | tail -n
 
 #Merge multiple block VCFs into a single VCF file
 cd joint_genotyping
-#ls block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz > ${OFFSPRING_ID}.vcf.list
-#bcftools concat -f ${OFFSPRING_ID}.vcf.list -o trio_${OFFSPRING_ID}.vcf.gz -O z
+ls block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz > ${OFFSPRING_ID}.vcf.list
+bcftools concat -f ${OFFSPRING_ID}.vcf.list -o trio_${OFFSPRING_ID}.vcf.gz -O z
 gatk IndexFeatureFile -I trio_${OFFSPRING_ID}.vcf.gz
 rm block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz
 
