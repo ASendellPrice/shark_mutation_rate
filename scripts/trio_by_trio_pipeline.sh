@@ -1,7 +1,8 @@
 #!/bin/bash
 #SBATCH -A snic2022-5-242
 #SBATCH -p core -N 1
-#SBATCH -t 1-00:00:00
+#SBATCH -t 2-00:00:00
+#SBATCH --array=1-7:1
 #SBATCH -J genotype_filtering
 
 #Activate conda environment and load required modules
@@ -9,15 +10,14 @@ conda activate genomics_general
 module load bioinfo-tools GATK/4.2.0.0 bcftools BEDTools/2.29.2 samtools/1.5 vcftools/0.1.16
 
 #Set offspring ID using slurm_array_task_id
-#OFFSPRING_ID=$(head -n $SLURM_ARRAY_TASK_ID ../resources/offspringIDs.txt | tail -n 1)
-OFFSPRING_ID=ind2024
+OFFSPRING_ID=$(head -n $SLURM_ARRAY_TASK_ID resources/offspringIDs.txt | tail -n 1)
 
 #Merge multiple block VCFs into a single VCF file
 cd joint_genotyping
 #ls block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz > ${OFFSPRING_ID}.vcf.list
 #bcftools concat -f ${OFFSPRING_ID}.vcf.list -o trio_${OFFSPRING_ID}.vcf.gz -O z
 gatk IndexFeatureFile -I trio_${OFFSPRING_ID}.vcf.gz
-#rm block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz
+rm block_*[0-9].trio_${OFFSPRING_ID}.vcf.gz
 
 #Create / move into directory "genotype_filtering"
 if [[ ! -d ../genotype_filtering ]]
