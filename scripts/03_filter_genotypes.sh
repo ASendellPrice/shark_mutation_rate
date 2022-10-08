@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -A snic2021-5-8
+#SBATCH -A snic2022-5-242
 #SBATCH -p core -N 1
 #SBATCH -t 1-00:00:00
 #SBATCH -J FilterGenos
