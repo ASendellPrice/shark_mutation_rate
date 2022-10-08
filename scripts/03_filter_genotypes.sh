@@ -6,7 +6,7 @@
 
 #Activate conda environment and load required modules
 conda activate GenomicsGeneral
-module load bioinfo-tools bcftools BEDTools/2.29.2 samtools/1.5
+module load bioinfo-tools GATK/4.2.0.0 bcftools BEDTools/2.29.2 samtools/1.5 vcftools/0.1.16
 
 #Make directory 
 mkdir genotype_filtering
