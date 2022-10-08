@@ -10,6 +10,7 @@ module load bioinfo-tools bcftools BEDTools/2.29.2 samtools/1.5
 
 #Make directory 
 mkdir genotype_filtering
+cd genotype_filtering
 
 #Called by GATK:
 # - monomorphic / biallelic sites only
