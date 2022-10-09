@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -A snic2022-5-242
 #SBATCH -p core -N 1
-#SBATCH -t 1-00:00:00
+#SBATCH -t 2-00:00:00
 #SBATCH -J FilterGenos
 
 #Activate conda environment and load required modules
@@ -9,26 +9,26 @@ conda activate GenomicsGeneral
 module load bioinfo-tools GATK/4.2.0.0 bcftools BEDTools/2.29.2 samtools/1.5 vcftools/0.1.16
 
 #Make directory 
-mkdir genotype_filtering
+#mkdir genotype_filtering
 cd genotype_filtering
 
 #Called by GATK:
 # - monomorphic / biallelic sites only
 # - genotyped in offspring and both parents
-gatk SelectVariants \
-     -R /proj/snic2020-2-19/private/shark/reference/satsuma/sHemOce1.mat.decon.20210528.fasta \
-     -V ../joint_genotyping/raw_merged.vcf.gz \
-     --select-type-to-include SNP \
-     --select-type-to-include NO_VARIATION \
-     -O temp.vcf.gz
-bcftools view temp.vcf.gz --max-alleles 2 \
-    | bgzip > called_by_GATK.vcf.gz
-rm temp.vcf.gz*
+#gatk SelectVariants \
+#     -R /proj/snic2020-2-19/private/shark/reference/satsuma/sHemOce1.mat.decon.20210528.fasta \
+#     -V ../joint_genotyping/raw_merged.vcf.gz \
+#     --select-type-to-include SNP \
+#     --select-type-to-include NO_VARIATION \
+#     -O temp.vcf.gz
+#bcftools view temp.vcf.gz --max-alleles 2 \
+#    | bgzip > called_by_GATK.vcf.gz
+#rm temp.vcf.gz*
 
 #Remove repeat regions / regions of low mappability
-bedtools intersect -a called_by_GATK.vcf.gz \
--b ../resources/HiglyMappable_Unmasked_ranges.txt -header \
-| bgzip > called_by_GATK.HighlyMappable.NonRepeat.vcf.gz
+#bedtools intersect -a called_by_GATK.vcf.gz \
+#-b ../resources/HiglyMappable_Unmasked_ranges.txt -header \
+#| bgzip > called_by_GATK.HighlyMappable.NonRepeat.vcf.gz
 
 #Set genotypes with GQ < 20 to missing "./."
 bcftools query -l called_by_GATK.HighlyMappable.NonRepeat.vcf.gz \
