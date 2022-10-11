@@ -2,7 +2,7 @@
 #SBATCH -A snic2022-5-242
 #SBATCH -p core -N 1
 #SBATCH -t 2-00:00:00
-#SBATCH --array=1-1:1
+#SBATCH --array=1-9:1
 #SBATCH -J count_sites
 
 #load required modules
@@ -22,17 +22,17 @@ tail -n 2 ../all.samples >> trio.samples
 #Count sites in "called_by_GATK.vcf.gz"
 # - monomorphic / biallelic sites only
 # - genotyped in offspring and both parents
-COUNT=$(zcat ../called_by_GATK.vcf.gz | bcftools filter -e 'GT[@trio.samples]="mis"' | grep -v "#" | wc -l)
+COUNT=$(bcftools view -e 'FILTER="LowQual"' ../called_by_GATK.vcf.gz | bcftools filter -e 'GT[@trio.samples]="mis"' | grep -v "#" | wc -l)
 echo "Biallelic / monomorphic called by GATK: " $COUNT > trio_${OFFSPRING_ID}.site.counts.txt
 
 #Count sites in "called_by_GATK.HighlyMappable.NonRepeat.vcf.gz"
-COUNT=$(zcat ../called_by_GATK.HighlyMappable.NonRepeat.vcf.gz | bcftools filter -e 'GT[@trio.samples]="mis"' | grep -v "#" | wc -l)
+COUNT=$(bcftools view -e 'FILTER="LowQual"' ../called_by_GATK.HighlyMappable.NonRepeat.vcf.gz | bcftools filter -e 'GT[@trio.samples]="mis"' | grep -v "#" | wc -l)
 echo "Non-repeat / highly mappable: " $COUNT > trio_${OFFSPRING_ID}.site.counts.txt
 
 #Count sites in "called_by_GATK.HighlyMappable.NonRepeat.minGQ20.vcf.gz"
-COUNT=$(zcat ../called_by_GATK.HighlyMappable.NonRepeat.minGQ20.vcf.gz | bcftools filter -e 'GT[@trio.samples]="mis"' | grep -v "#" | wc -l)
+COUNT=$(bcftools view -e 'FILTER="LowQual"' ../called_by_GATK.HighlyMappable.NonRepeat.minGQ20.vcf.gz | bcftools filter -e 'GT[@trio.samples]="mis"' | grep -v "#" | wc -l)
 echo "Min GQ20: " $COUNT >> trio_${OFFSPRING_ID}.site.counts.txt
 
 #Count sites in "called_by_GATK.HighlyMappable.NonRepeat.minGQ20.customFiltered.vcf.gz"
-#COUNT=$(zcat ../called_by_GATK.HighlyMappable.NonRepeat.minGQ20.customFiltered.vcf.gz | bcftools filter -e 'GT[@trio.samples]="mis"' | grep -v "#" | wc -l)
-#echo "Callable sites: " $COUNT >> trio_${OFFSPRING_ID}.site.counts.txt
+COUNT=$(bcftools view -e 'FILTER="LowQual"' ../called_by_GATK.HighlyMappable.NonRepeat.minGQ20.customFiltered.vcf.gz | bcftools filter -e 'GT[@trio.samples]="mis"' | grep -v "#" | wc -l)
+echo "Callable sites: " $COUNT >> trio_${OFFSPRING_ID}.site.counts.txt
